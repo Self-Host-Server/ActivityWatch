@@ -1,16 +1,33 @@
 services:
-  aw-server:
+  aw-gateway:
+    build: ./gateway
+    container_name: aw-gateway
+    restart: unless-stopped
+    environment:
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env, e.g. openssl rand -hex 32}
+      SESSION_HTTPS_ONLY: ${SESSION_HTTPS_ONLY:-false}
+    ports:
+      - "5600:8080"
+    volumes:
+      - gateway-data:/data
+    depends_on:
+      - aw-server-alice
+
+  # One aw-server instance per user, kept off the host network - only
+  # aw-gateway can reach it. To add another user:
+  #   1. Copy this block, rename "alice" everywhere (service name, volume).
+  #   2. docker compose up -d --build
+  #   3. docker compose exec aw-gateway python -m app.cli create-user <name>
+  aw-server-alice:
     build:
       context: .
       args:
         AW_VERSION: "0.13.2"
     image: activitywatch-server:0.13.2
-    container_name: aw-server
     restart: unless-stopped
-    ports:
-      - "5600:5600"
     volumes:
-      - aw-data:/config
+      - aw-data-alice:/config
 
 volumes:
-  aw-data:
+  gateway-data:
+  aw-data-alice:
