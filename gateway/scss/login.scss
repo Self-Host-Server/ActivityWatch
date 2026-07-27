@@ -60,4 +60,26 @@ form {
     font-size: 0.85rem;
     margin-bottom: 1rem;
   }
+
+  .divider {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin: 1rem 0;
+  }
+
+  .authentik-link {
+    display: block;
+    text-align: center;
+    padding: 0.6rem;
+    border-radius: 4px;
+    border: 1px solid $color-border;
+    color: $color-text;
+    text-decoration: none;
+    box-sizing: border-box;
+
+    &:hover {
+      background: $color-bg;
+    }
+  }
 }
