@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 """Delete a user (revokes both local and Authentik-based access)."""
 
-import argparse
-import os
-import sys
+import argparse, os, sys, django
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gatewayproj.settings")
 
-import django
 
 django.setup()
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  # noqa: E402
 
-from proxyauth import db
+from proxyauth import db  # noqa: E402
 
 
 def main():

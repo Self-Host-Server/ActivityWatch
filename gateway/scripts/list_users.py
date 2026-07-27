@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 """List provisioned users and the aw-server backend each is routed to."""
 
-import os
-import sys
+import os, sys, django
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gatewayproj.settings")
 
-import django
 
 django.setup()
 
-from proxyauth import db
+from proxyauth import db  # noqa: E402
 
 
 def main():

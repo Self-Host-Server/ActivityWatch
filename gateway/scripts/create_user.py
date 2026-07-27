@@ -3,29 +3,23 @@
 Authentik, if configured) and the aw-server backend they're routed to.
 """
 
-import argparse
-import getpass
-import os
-import sys
+import argparse, getpass, os, sys, django
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gatewayproj.settings")
 
-import django
 
 django.setup()
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  # noqa: E402
 
-from proxyauth import db
+from proxyauth import db  # noqa: E402
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("username")
-    parser.add_argument(
-        "--password", help="If omitted, prompts securely unless --no-password."
-    )
+    parser.add_argument("--password", help="If omitted, prompts securely unless --no-password.")
     parser.add_argument(
         "--no-password",
         action="store_true",
@@ -33,8 +27,7 @@ def main():
     )
     parser.add_argument(
         "--backend-host",
-        help="Internal host:port of this user's aw-server "
-        "(default: aw-server-<username>:5600)",
+        help="Internal host:port of this user's aw-server (default: aw-server-<username>:5600)",
     )
     args = parser.parse_args()
 
