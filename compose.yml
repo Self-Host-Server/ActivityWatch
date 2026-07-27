@@ -1,0 +1,16 @@
+services:
+  aw-server:
+    build:
+      context: .
+      args:
+        AW_VERSION: "0.13.2"
+    image: activitywatch-server:0.13.2
+    container_name: aw-server
+    restart: unless-stopped
+    ports:
+      - "5600:5600"
+    volumes:
+      - aw-data:/config
+
+volumes:
+  aw-data:
