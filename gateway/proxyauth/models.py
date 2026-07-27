@@ -10,7 +10,7 @@ class BackendMapping(models.Model):
     """
 
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="backend"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="aw_backend"
     )
     backend_host = models.CharField(max_length=255)
 

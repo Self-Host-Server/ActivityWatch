@@ -120,7 +120,7 @@ def proxy_view(request, path):
         return redirect(f"/login/?next={next_path}")
 
     try:
-        backend_host = request.user.backend.backend_host
+        backend_host = request.user.aw_backend.backend_host
     except BackendMapping.DoesNotExist:
         logout(request)
         return redirect("/login/")
