@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
-from .models import BackendMapping
+from . import db
 
 # Headers that must not be copied across a proxy hop as-is (RFC 7230 6.1 + friends).
 HOP_BY_HOP_HEADERS = {
@@ -37,10 +37,6 @@ if settings.AUTHENTIK_ISSUER:
     )
 
 
-def _user_is_provisioned(user: User) -> bool:
-    return BackendMapping.objects.filter(user=user).exists()
-
-
 @csrf_protect
 @require_http_methods(["GET", "POST"])
 def login_view(request):
@@ -51,7 +47,7 @@ def login_view(request):
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
         user = authenticate(request, username=username, password=password)
-        if user is not None and _user_is_provisioned(user):
+        if user is not None and db.get_backend_host(username) is not None:
             login(request, user)
             return redirect(next_url)
         error = "Invalid username or password"
@@ -87,15 +83,15 @@ def authentik_callback(request):
     if not username:
         return HttpResponse("Authentik did not return a username", status=400)
 
-    try:
-        user = User.objects.get(username=username)
-    except User.DoesNotExist:
+    if db.get_backend_host(username) is None:
         return HttpResponse(
             f"'{username}' is not provisioned for this ActivityWatch instance",
             status=403,
         )
 
-    if not _user_is_provisioned(user):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
         return HttpResponse(
             f"'{username}' is not provisioned for this ActivityWatch instance",
             status=403,
@@ -119,9 +115,8 @@ def proxy_view(request, path):
             next_path += f"?{request.META['QUERY_STRING']}"
         return redirect(f"/login/?next={next_path}")
 
-    try:
-        backend_host = request.user.aw_backend.backend_host
-    except BackendMapping.DoesNotExist:
+    backend_host = db.get_backend_host(request.user.username)
+    if backend_host is None:
         logout(request)
         return redirect("/login/")
 

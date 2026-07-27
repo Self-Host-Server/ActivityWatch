@@ -23,7 +23,7 @@ services:
   # aw-gateway can reach it. To add another user:
   #   1. Copy this block, rename "alice" everywhere (service name, volume).
   #   2. docker compose up -d --build
-  #   3. docker compose exec aw-gateway python manage.py create_user <name>
+  #   3. docker compose exec aw-gateway python scripts/create_user.py <name>
   aw-server-alice:
     build:
       context: .

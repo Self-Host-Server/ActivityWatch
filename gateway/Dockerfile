@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY manage.py .
 COPY gatewayproj ./gatewayproj
 COPY proxyauth ./proxyauth
+COPY scripts ./scripts
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 COPY --from=assets /build/static ./static
