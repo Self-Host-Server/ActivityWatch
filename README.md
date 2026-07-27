@@ -57,5 +57,5 @@ the local username/password form:
 
 A "Login with Authentik" link then appears on the login page. Signing in via Authentik only
 works for usernames already provisioned with `scripts/create_user.py` here — Authentik proves
-*who* someone is, this gateway's local user list still decides *whether* they're allowed
+_who_ someone is, this gateway's local user list still decides _whether_ they're allowed
 through and which `aw-server-<username>` they land on.
