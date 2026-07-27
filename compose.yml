@@ -4,8 +4,14 @@ services:
     container_name: aw-gateway
     restart: unless-stopped
     environment:
-      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env, e.g. openssl rand -hex 32}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?set DJANGO_SECRET_KEY in .env, e.g. openssl rand -hex 32}
       SESSION_HTTPS_ONLY: ${SESSION_HTTPS_ONLY:-false}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*}
+      # Optional: leave unset to disable the "Login with Authentik" option and
+      # only offer local username/password login.
+      AUTHENTIK_ISSUER: ${AUTHENTIK_ISSUER:-}
+      AUTHENTIK_CLIENT_ID: ${AUTHENTIK_CLIENT_ID:-}
+      AUTHENTIK_CLIENT_SECRET: ${AUTHENTIK_CLIENT_SECRET:-}
     ports:
       - "5600:8080"
     volumes:
@@ -17,7 +23,7 @@ services:
   # aw-gateway can reach it. To add another user:
   #   1. Copy this block, rename "alice" everywhere (service name, volume).
   #   2. docker compose up -d --build
-  #   3. docker compose exec aw-gateway python -m app.cli create-user <name>
+  #   3. docker compose exec aw-gateway python manage.py create_user <name>
   aw-server-alice:
     build:
       context: .
