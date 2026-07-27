@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -44,6 +45,7 @@ app.add_middleware(
     https_only=SESSION_HTTPS_ONLY,
     same_site="lax",
 )
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/login", response_class=HTMLResponse)
