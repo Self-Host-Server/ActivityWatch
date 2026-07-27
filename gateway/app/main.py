@@ -1,7 +1,6 @@
-import os
+import os, httpx
 from contextlib import asynccontextmanager
 
-import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
@@ -49,9 +48,7 @@ app.add_middleware(
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_form(request: Request, next: str = "/"):
-    return templates.TemplateResponse(
-        request, "login.html", {"next": next, "error": None}
-    )
+    return templates.TemplateResponse(request, "login.html", {"next": next, "error": None})
 
 
 @app.post("/login", response_class=HTMLResponse)
@@ -102,21 +99,13 @@ async def proxy(request: Request, path: str):
     backend_host = user["backend_host"]
     url = httpx.URL(f"http://{backend_host}/{path}", params=request.query_params)
 
-    forward_headers = {
-        k: v for k, v in request.headers.items() if k.lower() not in HOP_BY_HOP_HEADERS
-    }
+    forward_headers = {k: v for k, v in request.headers.items() if k.lower() not in HOP_BY_HOP_HEADERS}
     body = await request.body()
 
-    upstream_request = request.app.state.http.build_request(
-        request.method, url, headers=forward_headers, content=body
-    )
+    upstream_request = request.app.state.http.build_request(request.method, url, headers=forward_headers, content=body)
     upstream_response = await request.app.state.http.send(upstream_request)
 
-    response_headers = {
-        k: v
-        for k, v in upstream_response.headers.items()
-        if k.lower() not in HOP_BY_HOP_HEADERS
-    }
+    response_headers = {k: v for k, v in upstream_response.headers.items() if k.lower() not in HOP_BY_HOP_HEADERS}
     return Response(
         content=upstream_response.content,
         status_code=upstream_response.status_code,

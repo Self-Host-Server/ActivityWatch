@@ -1,6 +1,4 @@
-import argparse
-import getpass
-import sys
+import argparse, getpass, sys
 
 from . import db
 from .auth import hash_password

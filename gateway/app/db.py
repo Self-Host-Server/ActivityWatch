@@ -1,5 +1,4 @@
-import os
-import sqlite3
+import os, sqlite3
 from pathlib import Path
 
 DB_PATH = Path(os.environ.get("GATEWAY_DB_PATH", "/data/gateway.db"))
@@ -27,9 +26,7 @@ def init_db() -> None:
 
 def get_user(username: str) -> sqlite3.Row | None:
     with get_connection() as conn:
-        return conn.execute(
-            "SELECT * FROM users WHERE username = ?", (username,)
-        ).fetchone()
+        return conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
 
 
 def upsert_user(username: str, password_hash: str, backend_host: str) -> None:
