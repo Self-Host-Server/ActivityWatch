@@ -126,20 +126,12 @@ def proxy_view(request, path):
         return redirect("/login/")
 
     url = httpx.URL(f"http://{backend_host}/{path}", params=request.GET)
-    forward_headers = {
-        k: v for k, v in request.headers.items() if k.lower() not in HOP_BY_HOP_HEADERS
-    }
+    forward_headers = {k: v for k, v in request.headers.items() if k.lower() not in HOP_BY_HOP_HEADERS}
 
-    upstream_request = _http_client.build_request(
-        request.method, url, headers=forward_headers, content=request.body
-    )
+    upstream_request = _http_client.build_request(request.method, url, headers=forward_headers, content=request.body)
     upstream_response = _http_client.send(upstream_request)
 
-    response_headers = {
-        k: v
-        for k, v in upstream_response.headers.items()
-        if k.lower() not in HOP_BY_HOP_HEADERS
-    }
+    response_headers = {k: v for k, v in upstream_response.headers.items() if k.lower() not in HOP_BY_HOP_HEADERS}
     return HttpResponse(
         upstream_response.content,
         status=upstream_response.status_code,

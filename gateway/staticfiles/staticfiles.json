@@ -1,1 +1,8 @@
-{"paths": {"css/login.css": "css/login.f53f4b625167.css", "css/login.css.map": "css/login.css.38168d4ddf17.map"}, "version": "1.1", "hash": "3131d789e55a"}
+{
+  "paths": {
+    "css/login.css": "css/login.f53f4b625167.css",
+    "css/login.css.map": "css/login.css.38168d4ddf17.map"
+  },
+  "version": "1.1",
+  "hash": "3131d789e55a"
+}

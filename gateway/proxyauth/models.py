@@ -9,9 +9,7 @@ class BackendMapping(models.Model):
     proxy — see proxyauth.views.proxy_view.
     """
 
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="aw_backend"
-    )
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="aw_backend")
     backend_host = models.CharField(max_length=255)
 
     def __str__(self):
