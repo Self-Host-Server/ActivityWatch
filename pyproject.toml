@@ -136,7 +136,7 @@ commands = [
     "--write",
     "--log-level",
     "log",
-    "**/*.{css,js,html,json,yml,yaml,md}",
+    "**/*.{scss,js,html,json,yml,yaml,md}",
   ],
   [
     "npx",
@@ -155,7 +155,7 @@ commands = [
     "npx",
     "prettier",
     "--check",
-    "**/*.{css,js,html,json,yml,yaml,md}",
+    "**/*.{scss,js,html,json,yml,yaml,md}",
   ],
 ]
 
